@@ -1,3 +1,5 @@
+# Script written by Santiago Poblete
+
 import pandas as pd
 
 # Read the CSV file
@@ -10,7 +12,7 @@ row_count = lineScore.shape[0]
 
 print(column_names, row_count)
 
-# Remove all rows that dont have a value in any quarter
+# Remove all rows that dont have a in any quarter
 lineScore = lineScore.dropna(subset=['pts_qtr1_home', 'pts_qtr1_away', 'pts_qtr2_home', 'pts_qtr2_away', 'pts_qtr3_home', 'pts_qtr3_away', 'pts_qtr4_home', 'pts_qtr4_away'])
 
 # Get points by third quarter
@@ -27,17 +29,28 @@ ptsQtr4Away = lineScore['pts_away']
 # Get all ids ('game_id') from games where the team that was losing in the third quarter won the game
 homeWinningTeams = lineScore[(ptsQtr3Home < ptsQtr3Away) & (ptsQtr4Home > ptsQtr4Away)]
 awayWinningTeams = lineScore[(ptsQtr3Home > ptsQtr3Away) & (ptsQtr4Home < ptsQtr4Away)]
-homeWinningTeamIds = homeWinningTeams['game_id']
-awayWinningTeamsIds =  awayWinningTeams['game_id']
-winningTeamIds = pd.concat([homeWinningTeamIds, awayWinningTeamsIds])
+winningGames = pd.concat([homeWinningTeams, awayWinningTeams])
+
+# Get id of winning teams
+
+winningGamesIds = winningGames['game_id']
+
+if winningGames['pts_home'] > winningGames['pts_away']:
+    winningGamesWinner = winningGames['team_id_home']
+    winningGamesLoser = winningGames['team_id_away']
+else:
+    winningGamesWinner = winningGames['team_id_away']
+    winningGamesLoser = winningGames['team_id_home']
 
 # Get matching games from games dataframe
-comebackGames = games[games['game_id'].isin(winningTeamIds)]
+comebackGames = games[games['game_id'].isin(winningGamesIds)]
 comebackGamesIds = comebackGames['game_id']
-print(comebackGamesIds.head(5))
 
-# remove games where no 3pt attempts were made
+# Remove games where no 3pt attempts were made
 comebackGames = comebackGames.dropna(subset=['fg3a_home', 'fg3a_away'])
+
+# Remove games that are not from 2010 onwards
+comebackGames = comebackGames[comebackGames['game_date'] > '2010-01-01 00:00:00']
 
 
 # Get avg 3pt attempts
@@ -50,6 +63,4 @@ print(avgThreePtAttemptsHome, avgThreePtAttemptsAway)
 threePtAttemptsHome = comebackGames['fg3a_home']
 threePtAttemptsAway = comebackGames['fg3a_away']
 
-# top 5 results of 3pt percentage and 3pt made
-print(threePtAttemptsHome.head(5))
-print(threePtAttemptsAway.head(5))
+# top 5 results of 3pt attempts
