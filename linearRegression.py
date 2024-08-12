@@ -43,13 +43,13 @@ games_losses = games[games['wl_home'] == 'L']
 
 # Split games_wins and games_losses into training and test sets
 
-X_wins = games_wins[['min', 'fg_pct_home', 'fg3_pct_home', 'ft_pct_home', 'reb_home', 'ast_home', 'stl_home', 'blk_home', 'tov_home', 'pf_home', 'fg_pct_away', 'fg3_pct_away', 'ft_pct_away', 'reb_away', 'ast_away', 'stl_away', 'blk_away', 'tov_away', 'pf_away', 'pts_away']].values
+X_wins = games_wins[['reb_home', 'ast_home', 'stl_home', 'blk_home', 'tov_home', 'pf_home']].values
 
 y_wins = games_wins['pts_home'].values
 
 X_train_wins, X_test_wins, y_train_wins, y_test_wins = train_test_split(X_wins, y_wins, test_size=0.2, random_state=0)
 
-X_losses = games_losses[['min', 'fg_pct_home', 'fg3_pct_home', 'ft_pct_home', 'reb_home', 'ast_home', 'stl_home', 'blk_home', 'tov_home', 'pf_home', 'fg_pct_away', 'fg3_pct_away', 'ft_pct_away', 'reb_away', 'ast_away', 'stl_away', 'blk_away', 'tov_away', 'pf_away', 'pts_away']].values
+X_losses = games_losses[['reb_away', 'ast_away', 'stl_away', 'blk_away', 'tov_away', 'pf_away']].values
 
 y_losses = games_losses['pts_away'].values
 
@@ -64,3 +64,21 @@ regressor_losses = LinearRegression()
 # Fit the model
 
 regressor_wins.fit(X_train_wins, y_train_wins)
+
+regressor_losses.fit(X_train_losses, y_train_losses)
+
+# Labels
+
+x_labels_win = ['reb_home', 'ast_home', 'stl_home', 'blk_home', 'tov_home', 'pf_home']
+
+x_labels_loss = ['reb_away', 'ast_away', 'stl_away', 'blk_away', 'tov_away', 'pf_away']
+
+c_label = ['Coefficient']
+
+# Coefficients
+
+coeff_df_wins = pd.DataFrame(regressor_wins.coef_, x_labels_win, c_label)
+print(coeff_df_wins)
+
+coeff_df_losses = pd.DataFrame(regressor_losses.coef_, x_labels_loss, c_label)
+print(coeff_df_losses)
