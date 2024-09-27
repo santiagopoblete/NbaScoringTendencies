@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 
 # import game data
 
-games = pd.read_csv('./csv/shotsAndWinsNba.csv')
+games = pd.read_csv('./csv/shotsAndWinsNba_23_24.csv')
 
 # remove blank columns
 
