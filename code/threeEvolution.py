@@ -42,28 +42,18 @@ x_labels = ['Year']
 
 r2 = r2_score(y, regressor.predict(X))
 
-# Make an exponential fit to the data
-#x = avg_3pt_attempts['year']
-#y = avg_3pt_attempts['avg3pt_attempt']
-
-#p = np.polyfit(x, np.log(y), 1)
-
-# Calculate R2
-#r2 = r2_score(y, np.exp(np.polyval(p, x)))
-
 # Plot average 3pt attempts per year
-plt.plot(avg_3pt_attempts['year'], avg_3pt_attempts['avg3pt_attempt'])
-plt.xlabel('Year')
-plt.ylabel('Average 3pt attempts')
-plt.title('Average 3pt attempts per year')
+plt.scatter(X, y, color='#00438c', marker='none')
 
-#plt.plot(x, y, "o")
-#plt.plot(x, np.exp(np.polyval(p, x)))
+plt.plot(avg_3pt_attempts['year'], avg_3pt_attempts['avg3pt_attempt'], color='#00438c')
 
-# Plot the linear regression model
+plt.plot(X, regressor.predict(X),  color='#B8DE13', linestyle='--')
 
-plt.scatter(X, y, color='blue')
-plt.plot(X, regressor.predict(X), color='red')
+plt.xlabel('Año')
+plt.ylabel('Intentos de 3 Puntos por Partido')
+plt.title('Promedio Anual de Intentos de 3 Puntos por Partido')
+
+plt.grid(True, linestyle='--', alpha=0.5, axis='y')
 
 plt.show()
 plt.savefig('./avg3ptAttemptsLinear.png')
