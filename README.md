@@ -1,4 +1,4 @@
-# Investigating Shooting Tendencies in the Modern Era of Basketball.
+# Investigating Scoring Tendencies in the Modern Era of Basketball.
 _by Santiago Eduardo Poblete Talamante_
 
 ## Why am I doing this?
